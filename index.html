@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commande Logistique - Val de Garonne</title>
+    
+    <!-- Intégration des polices de la Charte D.I.X. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400&family=Georgia&display=swap" rel="stylesheet">
+    
+    <!-- Script Tailwind CSS avec configuration de la charte -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'dix-dark': '#405F59',   /* VERT FONCÉ - Textes */
+                        'dix-light': '#549e39',  /* VERT CLAIR - Liens et actions */
+                        'dix-grey': '#f3f3f3'    /* BLANC GRIS - Textes sur fonds foncés */
+                    },
+                    fontFamily: {
+                        'dix-title': ['Oswald', 'sans-serif'],
+                        'dix-text': ['Georgia', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Règles strictes de la charte imposées en CSS */
+        body {
+            font-family: 'Georgia', serif;
+            color: #405F59; /* Toujours en vert foncé */
+            background-color: #ffffff; /* Pour les fonds on garde le blanc */
+        }
+        
+        h1, h2, h3, h4, h5, h6, .titre-dix {
+            font-family: 'Oswald', sans-serif !important;
+            text-transform: uppercase !important; /* Toujours en majuscule */
+            font-weight: 400 !important; /* Jamais en gras */
+        }
+
+        a {
+            color: #549e39; /* Sauf les liens en vert clair */
+        }
+
+        /* Loader animation */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #549e39; /* Vert clair D.I.X. */
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="font-dix-text text-dix-dark">
+
+    <!-- EN-TÊTE AVEC VISUEL ET LOGOS -->
+    <header class="relative bg-dix-dark">
+        <!-- Image de fond Unsplash (Vue aérienne pelouse/béton) avec overlay pour lisibilité -->
+        <div class="absolute inset-0 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1596423735880-5c628fa7b243?q=80&w=2000&auto=format&fit=crop" alt="[Image de vue aérienne de carrés de pelouse verte sur béton]" class="w-full h-full object-cover opacity-30" />
+            <div class="absolute inset-0 bg-dix-dark opacity-60"></div>
+        </div>
+        
+        <div class="relative max-w-4xl mx-auto px-4 py-8">
+            <!-- Zone des Logos -->
+            <div class="flex justify-between items-center mb-10">
+                <!-- Espace Logo Client -->
+                <div class="bg-white p-2 shadow-md w-32 h-16 flex items-center justify-center border-b-2 border-dix-light">
+                    <!-- Remplace le texte par ta balise img : <img src="..." alt="Logo Val de Garonne" class="max-h-full"> -->
+                    <span class="text-xs text-center font-dix-title text-dix-dark">Val de Garonne</span>
+                </div>
+                <!-- Espace Logo D.I.X. -->
+                <div class="bg-white p-2 shadow-md w-32 h-16 flex items-center justify-center border-b-2 border-dix-light">
+                    <!-- Remplace le texte par ta balise img : <img src="..." alt="Logo Cabinet DIX" class="max-h-full"> -->
+                    <span class="text-xs text-center font-dix-title text-dix-dark">D.I.X.</span>
+                </div>
+            </div>
+
+            <!-- Titres de l'application -->
+            <h1 class="text-3xl tracking-wider text-dix-grey mb-2">Portail de Commande Cantines</h1>
+            <p class="text-dix-grey opacity-90 font-dix-text text-lg border-l-4 border-dix-light pl-3">Expérimentation de Mutualisation Logistique</p>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 py-10">
+        
+        <!-- ÉTAPE 1 : IDENTIFICATION -->
+        <section class="bg-white p-6 shadow-sm border border-gray-200 mb-10 border-t-4 border-t-dix-dark">
+            <h2 class="text-xl mb-5 text-dix-dark border-b border-gray-100 pb-2">1. Vos informations</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm mb-2 text-dix-dark">Nom de la Cantine</label>
+                    <select id="cantine-select" class="w-full border border-gray-300 px-4 py-3 focus:outline-none focus:border-dix-light focus:ring-1 focus:ring-dix-light bg-gray-50 text-dix-dark font-dix-text">
+                        <option value="">-- Sélectionnez votre établissement --</option>
+                        <option value="École Primaire Centre">École Primaire Centre</option>
+                        <option value="École Maternelle Sud">École Maternelle Sud</option>
+                        <option value="Collège Val de Garonne">Collège Val de Garonne</option>
+                        <option value="Lycée Agricole">Lycée Agricole</option>
+                        <option value="Cuisine Centrale">Cuisine Centrale</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm mb-2 text-dix-dark">Date de livraison souhaitée</label>
+                    <input type="date" id="date-livraison" class="w-full border border-gray-300 px-4 py-3 focus:outline-none focus:border-dix-light focus:ring-1 focus:ring-dix-light bg-gray-50 text-dix-dark font-dix-text">
+                </div>
+            </div>
+        </section>
+
+        <!-- ÉTAPE 2 : LE CATALOGUE (MERCURIALE) -->
+        <section>
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                <h2 class="text-xl text-dix-dark border-b border-gray-100 pb-2 grow w-full md:w-auto">2. Produits disponibles</h2>
+                <span id="item-count" class="text-sm bg-dix-dark text-dix-grey px-4 py-1 font-dix-title tracking-wider">Chargement...</span>
+            </div>
+
+            <div id="loading-state" class="flex flex-col items-center justify-center py-16">
+                <div class="loader mb-6"></div>
+                <p class="text-dix-dark opacity-70 italic">Synchronisation avec la mercuriale en cours...</p>
+            </div>
+
+            <div id="error-state" class="hidden bg-red-50 border-l-4 border-red-500 p-5 mb-6">
+                <p class="text-red-700 font-dix-text" id="error-message">Erreur de chargement des produits.</p>
+            </div>
+
+            <!-- Grille des produits injectée en JS -->
+            <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6 hidden">
+                <!-- Les cartes produits apparaitront ici -->
+            </div>
+        </section>
+
+        <!-- RÉSUMÉ FLOTTANT SUR MOBILE / FIXE EN BAS -->
+        <div class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-[0_-10px_20px_-5px_rgba(0,0,0,0.1)] p-4 z-50">
+            <div class="max-w-4xl mx-auto flex justify-between items-center">
+                <div>
+                    <p class="text-sm text-dix-dark opacity-70 uppercase tracking-widest font-dix-title">Total estimé</p>
+                    <p class="text-3xl text-dix-dark" id="cart-total">0.00 €</p>
+                </div>
+                <button id="submit-btn" onclick="submitOrder()" class="bg-dix-light text-dix-grey font-dix-title tracking-wider py-4 px-8 shadow hover:bg-dix-dark transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    Valider la commande
+                </button>
+            </div>
+        </div>
+        
+        <!-- Espace pour ne pas cacher le bas de page avec la barre fixe et le footer -->
+        <div class="h-16"></div>
+
+    </main>
+
+    <!-- FOOTER OFFICIEL D.I.X. -->
+    <footer class="bg-dix-dark text-dix-grey py-10 mt-12 pb-32">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <p class="mb-4 text-sm tracking-wide">
+                Outil conçu et réalisé par <span class="mx-2">|</span> <a href="https://www.dix-autrement.fr" target="_blank" class="text-dix-light hover:text-white transition-colors duration-200">www.dix-autrement.fr</a> <span class="mx-2">|</span>
+            </p>
+            <div class="opacity-70 text-xs leading-relaxed max-w-2xl mx-auto">
+                <p class="mb-1">© 2025-2026 Cabinet DIX Autrement. Tous droits réservés.</p>
+                <p>Toute reproduction, copie ou utilisation non autorisée de cet outil ou de son code source est strictement interdite.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL DE SUCCÈS -->
+    <div id="success-modal" class="fixed inset-0 bg-dix-dark bg-opacity-90 z-50 hidden flex items-center justify-center">
+        <div class="bg-white p-10 max-w-md w-full text-center mx-4 shadow-2xl border-t-8 border-dix-light">
+            <div class="w-20 h-20 bg-gray-50 border-2 border-dix-light rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg class="w-10 h-10 text-dix-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            </div>
+            <h3 class="text-2xl mb-3 text-dix-dark">Commande envoyée</h3>
+            <p class="text-dix-dark opacity-80 mb-8 font-dix-text">Les producteurs ont bien reçu votre demande pour cette semaine.</p>
+            <button onclick="location.reload()" class="w-full bg-dix-light text-dix-grey py-3 font-dix-title tracking-wider hover:bg-dix-dark transition-colors duration-300">NOUVELLE COMMANDE</button>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // ⚠️ CONFIGURATION : LIENS À REMPLACER ⚠️
+        // ==========================================
+        
+        const CSV_URL = "https://docs.google.com/spreadsheets/d/VOTRE_ID_DE_FICHIER/gviz/tq?tqx=out:csv&sheet=1.%20Mercuriale";
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/VOTRE_ID_DE_SCRIPT/exec";
+
+        // ==========================================
+
+        let productsData = [];
+        const cart = {};
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if(CSV_URL.includes("VOTRE_ID")) {
+                loadMockData();
+            } else {
+                fetchProducts();
+            }
+
+            document.getElementById('cantine-select').addEventListener('change', checkFormValidity);
+            document.getElementById('date-livraison').addEventListener('change', checkFormValidity);
+        });
+
+        async function fetchProducts() {
+            try {
+                const response = await fetch(CSV_URL);
+                if (!response.ok) throw new Error("Erreur réseau lors de la récupération du CSV");
+                const csvText = await response.text();
+                parseCSV(csvText);
+            } catch (error) {
+                showError("Impossible de charger la mercuriale. Vérifiez le lien CSV.");
+                console.error(error);
+            }
+        }
+
+        function parseCSV(text) {
+            const lines = text.split('\n');
+            productsData = [];
+            
+            for (let i = 1; i < lines.length; i++) {
+                if (!lines[i].trim()) continue;
+                
+                const row = lines[i].match(/(?:"[^"]*"|^[^"]*$|[^,]+)+/g);
+                if(!row) continue;
+
+                const cleanRow = row.map(el => el.replace(/^"|"$/g, '').trim());
+                const dispo = cleanRow[5] ? cleanRow[5].toUpperCase() : "";
+                
+                if (dispo === 'VRAI' || dispo === 'TRUE') {
+                    const prix = parseFloat(cleanRow[4].replace(',', '.'));
+                    productsData.push({
+                        producteur: cleanRow[0],
+                        produit: cleanRow[1],
+                        qualite: cleanRow[2],
+                        unite: cleanRow[3],
+                        prix: isNaN(prix) ? 0 : prix,
+                        ref: cleanRow[6]
+                    });
+                }
+            }
+            renderProducts();
+        }
+
+        function renderProducts() {
+            const grid = document.getElementById('products-grid');
+            const loader = document.getElementById('loading-state');
+            const count = document.getElementById('item-count');
+            
+            grid.innerHTML = '';
+            loader.classList.add('hidden');
+            grid.classList.remove('hidden');
+            count.innerText = `${productsData.length} PRODUITS`;
+
+            if (productsData.length === 0) {
+                grid.innerHTML = `<div class="col-span-full p-10 text-center bg-gray-50 border border-gray-200"><p class="text-dix-dark opacity-70 italic font-dix-text">Aucun produit disponible cette semaine.</p></div>`;
+                return;
+            }
+
+            productsData.forEach((item, index) => {
+                const isBio = item.qualite.toLowerCase().includes('bio');
+                // Styles de badges adaptés à la charte
+                const badgeColor = isBio ? 'bg-dix-light text-dix-grey' : 'bg-gray-200 text-dix-dark';
+
+                const card = document.createElement('div');
+                card.className = "bg-white p-6 shadow-sm border border-gray-200 flex flex-col justify-between hover:shadow-md transition-shadow border-l-4 border-l-dix-light";
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-xs font-dix-title tracking-widest px-3 py-1 ${badgeColor}">${item.qualite}</span>
+                            <span class="text-xs text-dix-dark opacity-60 font-dix-text italic">${item.producteur}</span>
+                        </div>
+                        <h3 class="text-lg text-dix-dark mb-2">${item.produit}</h3>
+                        <p class="text-dix-dark text-xl mb-6 font-dix-text">${item.prix.toFixed(2)} € <span class="text-sm opacity-50 italic">/ ${item.unite}</span></p>
+                    </div>
+                    <div class="flex items-center justify-between mt-auto border-t border-gray-100 pt-5">
+                        <button onclick="updateQty(${index}, -1)" class="w-12 h-12 bg-gray-50 border border-gray-200 text-dix-dark hover:bg-gray-100 flex items-center justify-center transition-colors pb-1 text-2xl font-dix-title">-</button>
+                        <input type="number" id="qty-${index}" value="0" min="0" readonly class="w-16 text-center text-xl text-dix-dark bg-transparent border-none focus:ring-0 font-dix-text">
+                        <button onclick="updateQty(${index}, 1)" class="w-12 h-12 bg-dix-light text-dix-grey hover:bg-dix-dark flex items-center justify-center transition-colors pb-1 text-2xl font-dix-title">+</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function updateQty(index, change) {
+            const input = document.getElementById(`qty-${index}`);
+            let newQty = parseInt(input.value) + change;
+            if (newQty < 0) newQty = 0;
+            input.value = newQty;
+
+            const item = productsData[index];
+            if (newQty > 0) {
+                cart[index] = { ...item, qty: newQty, totalLigne: newQty * item.prix };
+            } else {
+                delete cart[index];
+            }
+            
+            updateTotal();
+            checkFormValidity();
+        }
+
+        function updateTotal() {
+            let total = 0;
+            for (let key in cart) {
+                total += cart[key].totalLigne;
+            }
+            document.getElementById('cart-total').innerText = `${total.toFixed(2)} €`;
+        }
+
+        function checkFormValidity() {
+            const cantine = document.getElementById('cantine-select').value;
+            const date = document.getElementById('date-livraison').value;
+            const hasItems = Object.keys(cart).length > 0;
+            const btn = document.getElementById('submit-btn');
+
+            if (cantine && date && hasItems) {
+                btn.removeAttribute('disabled');
+            } else {
+                btn.setAttribute('disabled', 'true');
+            }
+        }
+
+        async function submitOrder() {
+            const btn = document.getElementById('submit-btn');
+            btn.setAttribute('disabled', 'true');
+            btn.innerText = "ENVOI EN COURS...";
+
+            const cantine = document.getElementById('cantine-select').value;
+            const date = document.getElementById('date-livraison').value;
+            
+            const itemsToOrder = Object.values(cart).map(item => ({
+                ref: item.ref,
+                qty: item.qty,
+                prix: item.prix,
+                total: item.totalLigne
+            }));
+
+            const payload = {
+                cantine: cantine,
+                date: date,
+                items: itemsToOrder
+            };
+
+            if(APPS_SCRIPT_URL.includes("VOTRE_ID")) {
+                setTimeout(() => {
+                    document.getElementById('success-modal').classList.remove('hidden');
+                }, 1000);
+                return;
+            }
+
+            try {
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                if (result.status === 'success') {
+                    document.getElementById('success-modal').classList.remove('hidden');
+                } else {
+                    throw new Error("Erreur serveur");
+                }
+            } catch (error) {
+                alert("Erreur lors de l'envoi de la commande. Veuillez réessayer.");
+                btn.removeAttribute('disabled');
+                btn.innerText = "VALIDER LA COMMANDE";
+            }
+        }
+
+        function showError(msg) {
+            document.getElementById('loading-state').classList.add('hidden');
+            const errorEl = document.getElementById('error-state');
+            errorEl.classList.remove('hidden');
+            document.getElementById('error-message').innerText = msg;
+        }
+
+        function loadMockData() {
+            productsData = [
+                { producteur: "Ferme Dupont", produit: "Courges Butternut", qualite: "Bio", unite: "kg", prix: 2.50, ref: "Courges Butternut (Bio) - Ferme Dupont [2.50€/kg]" },
+                { producteur: "Les Vergers du Soleil", produit: "Pommes Gala", qualite: "Conventionnel", unite: "kg", prix: 1.80, ref: "Pommes Gala (Conventionnel) - Les Vergers du Soleil [1.80€/kg]" },
+                { producteur: "Champignons Magiques", produit: "Pleurotes", qualite: "Bio", unite: "cagette 2kg", prix: 15.00, ref: "Pleurotes (Bio) - Champignons Magiques [15.00€/cagette 2kg]" },
+                { producteur: "Maraîchage Garonne", produit: "Carottes Sables", qualite: "En conversion", unite: "botte", prix: 1.20, ref: "Carottes Sables (En conversion) - Maraîchage Garonne [1.20€/botte]" }
+            ];
+            setTimeout(renderProducts, 800);
+        }
+    </script>
+</body>
+</html>
