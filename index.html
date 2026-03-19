@@ -179,7 +179,7 @@
 
     <script>
         // ==========================================
-        // ⚠️ CONFIGURATION : TES VRAIS LIENS SONT ICI ⚠️
+        // ⚠️ CONFIGURATION ⚠️
         // ==========================================
         
         // 1. Lien vers l'onglet "1. Mercuriale" (Pour les produits)
@@ -197,7 +197,7 @@
         const cart = {};
 
         document.addEventListener('DOMContentLoaded', () => {
-            fetchCantines(); // <-- C'est cette ligne magique qui manquait dans ton fichier !
+            fetchCantines(); // 
             fetchProducts();
 
             document.getElementById('cantine-select').addEventListener('change', checkFormValidity);
