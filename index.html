@@ -74,15 +74,12 @@
         </div>
         
         <div class="relative max-w-4xl mx-auto px-4 py-8">
-            <!-- Zone des Logos -->
-            <div class="flex justify-between items-center mb-10">
-                <!-- Espace Logo Client -->
-                <div class="bg-white p-2 shadow-md w-32 h-16 flex items-center justify-center border-b-2 border-dix-light">
-                    <span class="text-xs text-center font-dix-title text-dix-dark">Val de Garonne</span>
-                </div>
+            <!-- Zone des Logos (Logo DIX uniquement) -->
+            <div class="flex mb-10">
                 <!-- Espace Logo D.I.X. -->
-                <div class="bg-white p-2 shadow-md w-32 h-16 flex items-center justify-center border-b-2 border-dix-light">
-                    <span class="text-xs text-center font-dix-title text-dix-dark">D.I.X.</span>
+                <div class="bg-white p-2 shadow-md w-32 h-16 flex items-center justify-center border-b-2 border-dix-light rounded-sm">
+                    <!-- Remplace ce logo-dix.png par le nom exact de ton image sur GitHub -->
+                    <img src="logo-dix.png" alt="Logo Cabinet D.I.X." class="max-h-full max-w-full object-contain">
                 </div>
             </div>
 
@@ -209,14 +206,15 @@
                 if (!response.ok) throw new Error("Erreur CSV Cantines");
                 const csvText = await response.text();
                 
-                const lines = csvText.split('\n');
+                // Gère parfaitement les sauts de ligne Windows et Mac
+                const lines = csvText.split(/\r?\n/);
                 const select = document.getElementById('cantine-select');
                 select.innerHTML = '<option value="">-- Sélectionnez votre établissement --</option>';
                 
                 for (let i = 1; i < lines.length; i++) {
                     if (!lines[i].trim()) continue;
                     
-                    // NOUVEAU : Un séparateur beaucoup plus robuste qui gère parfaitement les cellules vides !
+                    // Sépare en gérant les guillemets éventuels
                     const columns = lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                     
                     // La cantine est dans la colonne B (Index 1)
@@ -231,7 +229,7 @@
                 }
             } catch (error) {
                 console.error("Impossible de charger les cantines:", error);
-                document.getElementById('cantine-select').innerHTML = '<option value="">-- Erreur de chargement --</option>';
+                document.getElementById('cantine-select').innerHTML = '<option value="">-- Erreur de chargement (Vérifiez le GID) --</option>';
             }
         }
 
@@ -248,16 +246,15 @@
         }
 
         function parseCSV(text) {
-            const lines = text.split('\n');
+            const lines = text.split(/\r?\n/); // Séparation robuste des lignes
             productsData = [];
             
             for (let i = 1; i < lines.length; i++) {
                 if (!lines[i].trim()) continue;
                 
-                // NOUVEAU : Application du même séparateur robuste ici aussi pour la stabilité
                 const columns = lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                 
-                if (columns.length < 7) continue; // Sécurité : Ignore les lignes incomplètes
+                if (columns.length < 7) continue;
 
                 const cleanRow = columns.map(el => el ? el.replace(/^"|"$/g, '').trim() : "");
                 const dispo = cleanRow[5] ? cleanRow[5].toUpperCase() : "";
@@ -377,8 +374,6 @@
             };
 
             try {
-                // NOUVEAU : Suppression de la propriété 'headers' qui déclenchait l'alerte de sécurité du navigateur (Preflight CORS).
-                // La requête part maintenant de façon simple et directe.
                 const response = await fetch(APPS_SCRIPT_URL, {
                     method: 'POST',
                     body: JSON.stringify(payload)
@@ -391,7 +386,7 @@
                     throw new Error("Erreur serveur : " + result.message);
                 }
             } catch (error) {
-                alert("Erreur lors de l'envoi de la commande : " + error.message + "\n(Vérifiez bien que l'Apps Script est déployé pour 'Tout le monde')");
+                alert("Erreur lors de l'envoi de la commande : " + error.message + "\n(Vérifiez bien que l'Apps Script est déployé en 'Nouvelle version')");
                 btn.removeAttribute('disabled');
                 btn.innerText = "VALIDER LA COMMANDE";
             }
