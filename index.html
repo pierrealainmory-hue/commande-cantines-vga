@@ -67,9 +67,9 @@
 
     <!-- EN-TÊTE AVEC VISUEL ET LOGOS -->
     <header class="relative bg-dix-dark">
-        <!-- Image de fond Unsplash (Vue aérienne pelouse/béton) avec overlay pour lisibilité -->
+        <!-- Image de fond Unsplash avec overlay pour lisibilité -->
         <div class="absolute inset-0 overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1596423735880-5c628fa7b243?q=80&w=2000&auto=format&fit=crop" alt="[Image de vue aérienne de carrés de pelouse verte sur béton]" class="w-full h-full object-cover opacity-30" />
+            <img src="https://images.unsplash.com/photo-1596423735880-5c628fa7b243?q=80&w=2000&auto=format&fit=crop" alt="Vue aérienne de carrés de pelouse verte sur béton" class="w-full h-full object-cover opacity-30" />
             <div class="absolute inset-0 bg-dix-dark opacity-60"></div>
         </div>
         
@@ -78,12 +78,10 @@
             <div class="flex justify-between items-center mb-10">
                 <!-- Espace Logo Client -->
                 <div class="bg-white p-2 shadow-md w-32 h-16 flex items-center justify-center border-b-2 border-dix-light">
-                    <!-- Remplace le texte par ta balise img : <img src="..." alt="Logo Val de Garonne" class="max-h-full"> -->
                     <span class="text-xs text-center font-dix-title text-dix-dark">Val de Garonne</span>
                 </div>
                 <!-- Espace Logo D.I.X. -->
                 <div class="bg-white p-2 shadow-md w-32 h-16 flex items-center justify-center border-b-2 border-dix-light">
-                    <!-- Remplace le texte par ta balise img : <img src="..." alt="Logo Cabinet DIX" class="max-h-full"> -->
                     <span class="text-xs text-center font-dix-title text-dix-dark">D.I.X.</span>
                 </div>
             </div>
@@ -102,13 +100,9 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label class="block text-sm mb-2 text-dix-dark">Nom de la Cantine</label>
+                    <!-- Le select n'a plus d'options en dur, elles sont chargées par le JS -->
                     <select id="cantine-select" class="w-full border border-gray-300 px-4 py-3 focus:outline-none focus:border-dix-light focus:ring-1 focus:ring-dix-light bg-gray-50 text-dix-dark font-dix-text">
-                        <option value="">-- Sélectionnez votre établissement --</option>
-                        <option value="École Primaire Centre">École Primaire Centre</option>
-                        <option value="École Maternelle Sud">École Maternelle Sud</option>
-                        <option value="Collège Val de Garonne">Collège Val de Garonne</option>
-                        <option value="Lycée Agricole">Lycée Agricole</option>
-                        <option value="Cuisine Centrale">Cuisine Centrale</option>
+                        <option value="">-- Chargement des établissements... --</option>
                     </select>
                 </div>
                 <div>
@@ -185,10 +179,16 @@
 
     <script>
         // ==========================================
-        // ⚠️ CONFIGURATION ⚠️
+        // ⚠️ CONFIGURATION : TES VRAIS LIENS SONT ICI ⚠️
         // ==========================================
         
-        const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSXWe-6t3f4Xwi-lfeTlmzo6A35O_gnEx6xJTNs_mq79lbz2tEIHfvLRD56vrTAbxc8jVERCIzYYJ71/pub?gid=0&single=true&output=csv";
+        // 1. Lien vers l'onglet "1. Mercuriale" (Pour les produits)
+        const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSXWe-6t3f4Xwi-lfeTlmzo6A35O_gnEx6xJTNs_mq79lbz2tEIHfvLRD56vrTAbxc8jVERCIzYYJ71/pub?gid=1525866873&single=true&output=csv";
+        
+        // 2. Lien vers l'onglet "Paramètres" (Pour la liste des cantines)
+        const CANTINES_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSXWe-6t3f4Xwi-lfeTlmzo6A35O_gnEx6xJTNs_mq79lbz2tEIHfvLRD56vrTAbxc8jVERCIzYYJ71/pub?gid=0&single=true&output=csv"; 
+        
+        // 3. Votre URL Apps Script validée (Pour l'envoi des commandes)
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyqJ0mBYyyHAtzQ5-oAfut3wjs8sF7blfqJcXLe8aREpFxpjcnf-1WVirfDCXBqxnOa/exec";
 
         // ==========================================
@@ -197,15 +197,45 @@
         const cart = {};
 
         document.addEventListener('DOMContentLoaded', () => {
-            if(CSV_URL.includes("VOTRE_ID")) {
-                loadMockData();
-            } else {
-                fetchProducts();
-            }
+            fetchCantines(); // <-- C'est cette ligne magique qui manquait dans ton fichier !
+            fetchProducts();
 
             document.getElementById('cantine-select').addEventListener('change', checkFormValidity);
             document.getElementById('date-livraison').addEventListener('change', checkFormValidity);
         });
+
+        // --- FONCTION QUI LIT LES CANTINES (N'était pas dans ton fichier) ---
+        async function fetchCantines() {
+            try {
+                const response = await fetch(CANTINES_CSV_URL);
+                if (!response.ok) throw new Error("Erreur CSV Cantines");
+                const csvText = await response.text();
+                
+                const lines = csvText.split('\n');
+                const select = document.getElementById('cantine-select');
+                select.innerHTML = '<option value="">-- Sélectionnez votre établissement --</option>';
+                
+                for (let i = 1; i < lines.length; i++) {
+                    if (!lines[i].trim()) continue;
+                    const row = lines[i].match(/(?:"[^"]*"|^[^"]*$|[^,]+)+/g);
+                    if(!row) continue;
+
+                    const cleanRow = row.map(el => el.replace(/^"|"$/g, '').trim());
+                    const cantine = cleanRow[1]; // Colonne B
+                    
+                    if (cantine && cantine.trim() !== "") {
+                        const option = document.createElement('option');
+                        option.value = cantine;
+                        option.innerText = cantine;
+                        select.appendChild(option);
+                    }
+                }
+            } catch (error) {
+                console.error("Impossible de charger les cantines:", error);
+                document.getElementById('cantine-select').innerHTML = '<option value="">-- Erreur de chargement --</option>';
+            }
+        }
+        // -------------------------------------------------------------------
 
         async function fetchProducts() {
             try {
@@ -347,13 +377,6 @@
                 items: itemsToOrder
             };
 
-            if(APPS_SCRIPT_URL.includes("VOTRE_ID")) {
-                setTimeout(() => {
-                    document.getElementById('success-modal').classList.remove('hidden');
-                }, 1000);
-                return;
-            }
-
             try {
                 const response = await fetch(APPS_SCRIPT_URL, {
                     method: 'POST',
@@ -365,10 +388,10 @@
                 if (result.status === 'success') {
                     document.getElementById('success-modal').classList.remove('hidden');
                 } else {
-                    throw new Error("Erreur serveur");
+                    throw new Error("Erreur serveur : " + result.message);
                 }
             } catch (error) {
-                alert("Erreur lors de l'envoi de la commande. Veuillez réessayer.");
+                alert("Erreur lors de l'envoi de la commande : " + error.message);
                 btn.removeAttribute('disabled');
                 btn.innerText = "VALIDER LA COMMANDE";
             }
@@ -379,16 +402,6 @@
             const errorEl = document.getElementById('error-state');
             errorEl.classList.remove('hidden');
             document.getElementById('error-message').innerText = msg;
-        }
-
-        function loadMockData() {
-            productsData = [
-                { producteur: "Ferme Dupont", produit: "Courges Butternut", qualite: "Bio", unite: "kg", prix: 2.50, ref: "Courges Butternut (Bio) - Ferme Dupont [2.50€/kg]" },
-                { producteur: "Les Vergers du Soleil", produit: "Pommes Gala", qualite: "Conventionnel", unite: "kg", prix: 1.80, ref: "Pommes Gala (Conventionnel) - Les Vergers du Soleil [1.80€/kg]" },
-                { producteur: "Champignons Magiques", produit: "Pleurotes", qualite: "Bio", unite: "cagette 2kg", prix: 15.00, ref: "Pleurotes (Bio) - Champignons Magiques [15.00€/cagette 2kg]" },
-                { producteur: "Maraîchage Garonne", produit: "Carottes Sables", qualite: "En conversion", unite: "botte", prix: 1.20, ref: "Carottes Sables (En conversion) - Maraîchage Garonne [1.20€/botte]" }
-            ];
-            setTimeout(renderProducts, 800);
         }
     </script>
 </body>
