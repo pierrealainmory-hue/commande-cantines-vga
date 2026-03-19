@@ -100,7 +100,6 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label class="block text-sm mb-2 text-dix-dark">Nom de la Cantine</label>
-                    <!-- Le select n'a plus d'options en dur, elles sont chargées par le JS -->
                     <select id="cantine-select" class="w-full border border-gray-300 px-4 py-3 focus:outline-none focus:border-dix-light focus:ring-1 focus:ring-dix-light bg-gray-50 text-dix-dark font-dix-text">
                         <option value="">-- Chargement des établissements... --</option>
                     </select>
@@ -179,7 +178,7 @@
 
     <script>
         // ==========================================
-        // ⚠️ CONFIGURATION ⚠️
+        // ⚠️ CONFIGURATION : TES VRAIS LIENS SONT ICI ⚠️
         // ==========================================
         
         // 1. Lien vers l'onglet "1. Mercuriale" (Pour les produits)
@@ -197,14 +196,13 @@
         const cart = {};
 
         document.addEventListener('DOMContentLoaded', () => {
-            fetchCantines(); // 
+            fetchCantines();
             fetchProducts();
 
             document.getElementById('cantine-select').addEventListener('change', checkFormValidity);
             document.getElementById('date-livraison').addEventListener('change', checkFormValidity);
         });
 
-        // --- FONCTION QUI LIT LES CANTINES (N'était pas dans ton fichier) ---
         async function fetchCantines() {
             try {
                 const response = await fetch(CANTINES_CSV_URL);
@@ -217,13 +215,14 @@
                 
                 for (let i = 1; i < lines.length; i++) {
                     if (!lines[i].trim()) continue;
-                    const row = lines[i].match(/(?:"[^"]*"|^[^"]*$|[^,]+)+/g);
-                    if(!row) continue;
-
-                    const cleanRow = row.map(el => el.replace(/^"|"$/g, '').trim());
-                    const cantine = cleanRow[1]; // Colonne B
                     
-                    if (cantine && cantine.trim() !== "") {
+                    // NOUVEAU : Un séparateur beaucoup plus robuste qui gère parfaitement les cellules vides !
+                    const columns = lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                    
+                    // La cantine est dans la colonne B (Index 1)
+                    const cantine = columns[1] ? columns[1].replace(/^"|"$/g, '').trim() : "";
+                    
+                    if (cantine && cantine !== "") {
                         const option = document.createElement('option');
                         option.value = cantine;
                         option.innerText = cantine;
@@ -235,7 +234,6 @@
                 document.getElementById('cantine-select').innerHTML = '<option value="">-- Erreur de chargement --</option>';
             }
         }
-        // -------------------------------------------------------------------
 
         async function fetchProducts() {
             try {
@@ -256,10 +254,12 @@
             for (let i = 1; i < lines.length; i++) {
                 if (!lines[i].trim()) continue;
                 
-                const row = lines[i].match(/(?:"[^"]*"|^[^"]*$|[^,]+)+/g);
-                if(!row) continue;
+                // NOUVEAU : Application du même séparateur robuste ici aussi pour la stabilité
+                const columns = lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                
+                if (columns.length < 7) continue; // Sécurité : Ignore les lignes incomplètes
 
-                const cleanRow = row.map(el => el.replace(/^"|"$/g, '').trim());
+                const cleanRow = columns.map(el => el ? el.replace(/^"|"$/g, '').trim() : "");
                 const dispo = cleanRow[5] ? cleanRow[5].toUpperCase() : "";
                 
                 if (dispo === 'VRAI' || dispo === 'TRUE') {
@@ -294,7 +294,6 @@
 
             productsData.forEach((item, index) => {
                 const isBio = item.qualite.toLowerCase().includes('bio');
-                // Styles de badges adaptés à la charte
                 const badgeColor = isBio ? 'bg-dix-light text-dix-grey' : 'bg-gray-200 text-dix-dark';
 
                 const card = document.createElement('div');
@@ -378,9 +377,10 @@
             };
 
             try {
+                // NOUVEAU : Suppression de la propriété 'headers' qui déclenchait l'alerte de sécurité du navigateur (Preflight CORS).
+                // La requête part maintenant de façon simple et directe.
                 const response = await fetch(APPS_SCRIPT_URL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify(payload)
                 });
                 
@@ -391,7 +391,7 @@
                     throw new Error("Erreur serveur : " + result.message);
                 }
             } catch (error) {
-                alert("Erreur lors de l'envoi de la commande : " + error.message);
+                alert("Erreur lors de l'envoi de la commande : " + error.message + "\n(Vérifiez bien que l'Apps Script est déployé pour 'Tout le monde')");
                 btn.removeAttribute('disabled');
                 btn.innerText = "VALIDER LA COMMANDE";
             }
