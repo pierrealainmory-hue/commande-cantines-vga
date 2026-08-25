@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Commande Logistique - Val de Garonne</title>
     
-    <!-- Intégration des polices de la Charte D.I.X. -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400&family=Georgia&display=swap" rel="stylesheet">
     
-    <!-- Script Tailwind CSS avec configuration de la charte -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -29,70 +27,70 @@
             }
         }
     </script>
-
     <style>
-        /* Règles strictes de la charte imposées en CSS */
         body {
             font-family: 'Georgia', serif;
-            color: #405F59; /* Toujours en vert foncé */
-            background-color: #ffffff; /* Pour les fonds on garde le blanc */
+            color: #405F59;
+            background-color: #ffffff;
         }
         
         h1, h2, h3, h4, h5, h6, .titre-dix {
             font-family: 'Oswald', sans-serif !important;
-            text-transform: uppercase !important; /* Toujours en majuscule */
-            font-weight: 400 !important; /* Jamais en gras */
+            text-transform: uppercase !important;
+            font-weight: 400 !important;
         }
 
-        a {
-            color: #549e39; /* Sauf les liens en vert clair */
-        }
+        a { color: #549e39; }
 
-        /* Loader animation */
         .loader {
             border: 4px solid #f3f3f3;
-            border-top: 4px solid #549e39; /* Vert clair D.I.X. */
+            border-top: 4px solid #549e39;
             border-radius: 50%;
             width: 40px;
             height: 40px;
             animation: spin 1s linear infinite;
         }
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+
+        /* Styles pour le scroll du modal de planning */
+        .modal-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+        .modal-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        .modal-scroll::-webkit-scrollbar-thumb {
+            background: #405F59; 
+            border-radius: 4px;
         }
     </style>
 </head>
 <body class="font-dix-text text-dix-dark">
 
-    <!-- EN-TÊTE AVEC VISUEL ET LOGOS -->
     <header class="relative bg-dix-dark">
-        <!-- Image de fond Unsplash avec overlay pour lisibilité -->
         <div class="absolute inset-0 overflow-hidden">
             <img src="https://images.unsplash.com/photo-1596423735880-5c628fa7b243?q=80&w=2000&auto=format&fit=crop" alt="Vue aérienne de carrés de pelouse verte sur béton" class="w-full h-full object-cover opacity-30" />
             <div class="absolute inset-0 bg-dix-dark opacity-60"></div>
         </div>
         
         <div class="relative max-w-4xl mx-auto px-4 py-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-            
-            <!-- Titres de l'application -->
             <div>
                 <h1 class="text-3xl tracking-wider text-dix-grey mb-2">Portail de Commande Cantines</h1>
-                <!-- Retrait de border-l-4 et border-dix-light pl-3 pour enlever le trait vert -->
                 <p class="text-dix-grey opacity-90 font-dix-text text-lg">Expérimentation de Mutualisation Logistique</p>
             </div>
-
-            <!-- Zone des Logos (Logo DIX uniquement à droite) -->
             <div class="bg-white p-3 shadow-md h-24 flex items-center justify-center rounded-sm shrink-0">
-                <img src="logo-dix.jpg" alt="Logo Cabinet D.I.X." class="max-h-full max-w-full object-contain">
+                <!-- Fallback texte si l'image ne charge pas pour l'exemple -->
+                <div class="font-dix-title text-dix-dark text-xl font-bold px-4">D.I.X.</div>
             </div>
-
         </div>
     </header>
 
     <main class="max-w-4xl mx-auto px-4 py-10">
         
-        <!-- ÉTAPE 1 : IDENTIFICATION -->
         <section class="bg-white p-6 shadow-sm border border-gray-200 mb-10 border-t-4 border-t-dix-dark">
             <h2 class="text-xl mb-5 text-dix-dark border-b border-gray-100 pb-2">1. Vos informations</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -109,11 +107,40 @@
             </div>
         </section>
 
-        <!-- ÉTAPE 2 : LE CATALOGUE (MERCURIALE) -->
         <section>
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                <h2 class="text-xl text-dix-dark border-b border-gray-100 pb-2 grow w-full md:w-auto">2. Produits disponibles</h2>
-                <span id="item-count" class="text-sm bg-dix-dark text-dix-grey px-4 py-1 font-dix-title tracking-wider">Chargement...</span>
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 gap-4 border-b border-gray-200 pb-4">
+                <div>
+                    <h2 class="text-xl text-dix-dark mb-2">2. Produits disponibles</h2>
+                    <p class="text-sm opacity-70">Sélectionnez les quantités souhaitées.</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span id="item-count" class="text-sm bg-dix-dark text-dix-grey px-4 py-2 font-dix-title tracking-wider shadow-sm">Chargement...</span>
+                    <!-- Nouveau bouton Planning -->
+                    <button onclick="openPlanning()" class="text-sm bg-dix-light text-white px-4 py-2 font-dix-title tracking-wider shadow-sm hover:bg-dix-dark transition-colors flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        Planning
+                    </button>
+                </div>
+            </div>
+
+            <!-- NOUVEAU : Barre de filtres de recherche -->
+            <div id="filters-bar" class="hidden bg-gray-50 p-4 mb-6 border border-gray-200 grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-xs uppercase tracking-widest text-dix-dark mb-1 font-dix-title">Recherche</label>
+                    <input type="text" id="search-input" placeholder="Ex: Pomme, Carotte..." class="w-full border border-gray-300 p-2 focus:ring-1 focus:ring-dix-light focus:border-dix-light bg-white text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase tracking-widest text-dix-dark mb-1 font-dix-title">Filtrer par Famille</label>
+                    <select id="filter-famille" class="w-full border border-gray-300 p-2 focus:ring-1 focus:ring-dix-light focus:border-dix-light bg-white text-sm">
+                        <option value="">Toutes les familles</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs uppercase tracking-widest text-dix-dark mb-1 font-dix-title">Filtrer par Producteur</label>
+                    <select id="filter-producteur" class="w-full border border-gray-300 p-2 focus:ring-1 focus:ring-dix-light focus:border-dix-light bg-white text-sm">
+                        <option value="">Tous les producteurs</option>
+                    </select>
+                </div>
             </div>
 
             <div id="loading-state" class="flex flex-col items-center justify-center py-16">
@@ -131,32 +158,28 @@
             </div>
         </section>
 
-        <!-- RÉSUMÉ FLOTTANT SUR MOBILE / FIXE EN BAS -->
-        <div class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-[0_-10px_20px_-5px_rgba(0,0,0,0.1)] p-4 z-50">
+        <div class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-[0_-10px_20px_-5px_rgba(0,0,0,0.1)] p-4 z-40">
             <div class="max-w-4xl mx-auto flex justify-between items-center">
                 <div>
                     <p class="text-sm text-dix-dark opacity-70 uppercase tracking-widest font-dix-title">Total estimé</p>
-                    <p class="text-3xl text-dix-dark" id="cart-total">0.00 €</p>
+                    <p class="text-3xl text-dix-dark font-bold" id="cart-total">0.00 €</p>
                 </div>
-                <button id="submit-btn" onclick="submitOrder()" class="bg-dix-light text-dix-grey font-dix-title tracking-wider py-4 px-8 shadow hover:bg-dix-dark transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                <button id="submit-btn" onclick="submitOrder()" class="bg-dix-light text-white font-dix-title tracking-wider py-4 px-8 shadow hover:bg-dix-dark transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
                     Valider la commande
                 </button>
             </div>
         </div>
         
-        <!-- Espace pour ne pas cacher le bas de page avec la barre fixe et le footer -->
         <div class="h-16"></div>
-
     </main>
 
-    <!-- FOOTER OFFICIEL D.I.X. -->
     <footer class="bg-dix-dark text-dix-grey py-10 mt-12 pb-32">
         <div class="max-w-4xl mx-auto px-4 text-center">
             <p class="mb-4 text-sm tracking-wide">
                 Outil conçu et réalisé par <span class="mx-2">|</span> <a href="https://www.dix-autrement.fr" target="_blank" class="text-dix-light hover:text-white transition-colors duration-200">www.dix-autrement.fr</a> <span class="mx-2">|</span>
             </p>
             <div class="opacity-70 text-xs leading-relaxed max-w-2xl mx-auto">
-                <p class="mb-1">© 2025-2026 Cabinet DIX Autrement. Tous droits réservés.</p>
+                <p class="mb-1">© 2026 Cabinet DIX Autrement. Tous droits réservés.</p>
                 <p>Toute reproduction, copie ou utilisation non autorisée de cet outil ou de son code source est strictement interdite.</p>
             </div>
         </div>
@@ -168,9 +191,27 @@
             <div class="w-20 h-20 bg-gray-50 border-2 border-dix-light rounded-full flex items-center justify-center mx-auto mb-6">
                 <svg class="w-10 h-10 text-dix-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
             </div>
-            <h3 class="text-2xl mb-3 text-dix-dark">Commande envoyée</h3>
-            <p class="text-dix-dark opacity-80 mb-8 font-dix-text">Les producteurs ont bien reçu votre demande pour cette semaine.</p>
-            <button onclick="location.reload()" class="w-full bg-dix-light text-dix-grey py-3 font-dix-title tracking-wider hover:bg-dix-dark transition-colors duration-300">NOUVELLE COMMANDE</button>
+            <h3 class="text-2xl mb-3 text-dix-dark font-dix-title uppercase">Commande envoyée</h3>
+            <p class="text-dix-dark opacity-80 mb-8 font-dix-text">Les producteurs ont bien reçu votre demande pour cette semaine. Le récapitulatif a été mis à jour.</p>
+            <button onclick="location.reload()" class="w-full bg-dix-light text-white py-3 font-dix-title tracking-wider hover:bg-dix-dark transition-colors duration-300">NOUVELLE COMMANDE</button>
+        </div>
+    </div>
+
+    <!-- MODAL PLANNING DES DISPONIBILITÉS -->
+    <div id="planning-modal" class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl border-t-8 border-dix-dark">
+            <div class="p-6 border-b border-gray-200 flex justify-between items-center bg-gray-50">
+                <h3 class="text-2xl text-dix-dark font-dix-title uppercase tracking-wide">📅 Planning des disponibilités</h3>
+                <button onclick="closePlanning()" class="text-dix-dark hover:text-red-600">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div id="planning-content" class="p-6 overflow-y-auto modal-scroll flex-grow bg-white">
+                <!-- Le contenu du planning sera injecté ici -->
+            </div>
+            <div class="p-4 border-t border-gray-200 bg-gray-50 text-right">
+                <button onclick="closePlanning()" class="bg-dix-dark text-white px-6 py-2 font-dix-title tracking-wider hover:bg-opacity-80 transition-colors">FERMER</button>
+            </div>
         </div>
     </div>
 
@@ -187,18 +228,25 @@
         
         // 3. Votre URL Apps Script validée (Pour l'envoi des commandes)
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyqJ0mBYyyHAtzQ5-oAfut3wjs8sF7blfqJcXLe8aREpFxpjcnf-1WVirfDCXBqxnOa/exec";
-
+        
         // ==========================================
-
+        
         let productsData = [];
+        let filteredProducts = [];
         const cart = {};
 
         document.addEventListener('DOMContentLoaded', () => {
             fetchCantines();
             fetchProducts();
-
+            
+            // Listeners pour la validation du formulaire
             document.getElementById('cantine-select').addEventListener('change', checkFormValidity);
             document.getElementById('date-livraison').addEventListener('change', checkFormValidity);
+
+            // Listeners pour les filtres
+            document.getElementById('search-input').addEventListener('input', applyFilters);
+            document.getElementById('filter-famille').addEventListener('change', applyFilters);
+            document.getElementById('filter-producteur').addEventListener('change', applyFilters);
         });
 
         async function fetchCantines() {
@@ -207,18 +255,13 @@
                 if (!response.ok) throw new Error("Erreur CSV Cantines");
                 const csvText = await response.text();
                 
-                // Gère parfaitement les sauts de ligne Windows et Mac
                 const lines = csvText.split(/\r?\n/);
                 const select = document.getElementById('cantine-select');
                 select.innerHTML = '<option value="">-- Sélectionnez votre établissement --</option>';
                 
                 for (let i = 1; i < lines.length; i++) {
                     if (!lines[i].trim()) continue;
-                    
-                    // Sépare en gérant les guillemets éventuels
                     const columns = lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                    
-                    // La cantine est dans la colonne B (Index 1)
                     const cantine = columns[1] ? columns[1].replace(/^"|"$/g, '').trim() : "";
                     
                     if (cantine && cantine !== "") {
@@ -230,14 +273,14 @@
                 }
             } catch (error) {
                 console.error("Impossible de charger les cantines:", error);
-                document.getElementById('cantine-select').innerHTML = '<option value="">-- Erreur de chargement (Vérifiez le GID) --</option>';
+                document.getElementById('cantine-select').innerHTML = '<option value="">-- Erreur de chargement --</option>';
             }
         }
 
         async function fetchProducts() {
             try {
                 const response = await fetch(CSV_URL);
-                if (!response.ok) throw new Error("Erreur réseau lors de la récupération du CSV");
+                if (!response.ok) throw new Error("Erreur réseau");
                 const csvText = await response.text();
                 parseCSV(csvText);
             } catch (error) {
@@ -247,31 +290,83 @@
         }
 
         function parseCSV(text) {
-            const lines = text.split(/\r?\n/); // Séparation robuste des lignes
+            const lines = text.split(/\r?\n/); 
             productsData = [];
+            
+            // Hypothèse de structure des colonnes dans le Sheet (modifiable selon votre besoin) :
+            // 0:Producteur | 1:Produit | 2:Qualite | 3:Unite | 4:Prix | 5:Dispo | 6:Ref | 7:Famille | 8:DateDebut | 9:DateFin
             
             for (let i = 1; i < lines.length; i++) {
                 if (!lines[i].trim()) continue;
                 
                 const columns = lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                
                 if (columns.length < 7) continue;
-
+                
                 const cleanRow = columns.map(el => el ? el.replace(/^"|"$/g, '').trim() : "");
                 const dispo = cleanRow[5] ? cleanRow[5].toUpperCase() : "";
                 
+                // Si la ligne est notée comme disponible (VRAI/TRUE)
                 if (dispo === 'VRAI' || dispo === 'TRUE') {
                     const prix = parseFloat(cleanRow[4].replace(',', '.'));
+                    
+                    // Extraction sécurisée des nouvelles colonnes (Famille et Dates)
+                    const famille = cleanRow[7] ? cleanRow[7] : "Non catégorisé";
+                    const dateDebut = cleanRow[8] ? cleanRow[8] : "N/C";
+                    const dateFin = cleanRow[9] ? cleanRow[9] : "N/C";
+
                     productsData.push({
+                        id: i, // identifiant unique basé sur la ligne
                         producteur: cleanRow[0],
                         produit: cleanRow[1],
                         qualite: cleanRow[2],
                         unite: cleanRow[3],
                         prix: isNaN(prix) ? 0 : prix,
-                        ref: cleanRow[6]
+                        ref: cleanRow[6],
+                        famille: famille,
+                        dateDebut: dateDebut,
+                        dateFin: dateFin
                     });
                 }
             }
+            
+            filteredProducts = [...productsData]; // Au départ, tout est affiché
+            populateFilters();
+            renderProducts();
+        }
+
+        function populateFilters() {
+            const prodSelect = document.getElementById('filter-producteur');
+            const famSelect = document.getElementById('filter-famille');
+            
+            // Extraire listes uniques
+            const producteurs = [...new Set(productsData.map(p => p.producteur))].sort();
+            const familles = [...new Set(productsData.map(p => p.famille))].sort();
+            
+            producteurs.forEach(p => {
+                if(p) prodSelect.innerHTML += `<option value="${p}">${p}</option>`;
+            });
+            
+            familles.forEach(f => {
+                if(f) famSelect.innerHTML += `<option value="${f}">${f}</option>`;
+            });
+
+            // Afficher la barre de filtre une fois les données chargées
+            document.getElementById('filters-bar').classList.remove('hidden');
+        }
+
+        function applyFilters() {
+            const searchVal = document.getElementById('search-input').value.toLowerCase();
+            const famVal = document.getElementById('filter-famille').value;
+            const prodVal = document.getElementById('filter-producteur').value;
+
+            filteredProducts = productsData.filter(p => {
+                const matchSearch = p.produit.toLowerCase().includes(searchVal) || p.producteur.toLowerCase().includes(searchVal);
+                const matchFam = famVal === "" || p.famille === famVal;
+                const matchProd = prodVal === "" || p.producteur === prodVal;
+                
+                return matchSearch && matchFam && matchProd;
+            });
+
             renderProducts();
         }
 
@@ -283,49 +378,66 @@
             grid.innerHTML = '';
             loader.classList.add('hidden');
             grid.classList.remove('hidden');
-            count.innerText = `${productsData.length} PRODUITS`;
+            
+            count.innerText = `${filteredProducts.length} PRODUITS`;
 
-            if (productsData.length === 0) {
-                grid.innerHTML = `<div class="col-span-full p-10 text-center bg-gray-50 border border-gray-200"><p class="text-dix-dark opacity-70 italic font-dix-text">Aucun produit disponible cette semaine.</p></div>`;
+            if (filteredProducts.length === 0) {
+                grid.innerHTML = `<div class="col-span-full p-10 text-center bg-gray-50 border border-gray-200"><p class="text-dix-dark opacity-70 italic font-dix-text">Aucun produit ne correspond à votre recherche.</p></div>`;
                 return;
             }
 
-            productsData.forEach((item, index) => {
+            filteredProducts.forEach((item) => {
                 const isBio = item.qualite.toLowerCase().includes('bio');
-                const badgeColor = isBio ? 'bg-dix-light text-dix-grey' : 'bg-gray-200 text-dix-dark';
+                const badgeColor = isBio ? 'bg-dix-light text-white' : 'bg-gray-200 text-dix-dark';
+                
+                // Récupération de la quantité déjà dans le panier si existante
+                const currentQty = cart[item.id] ? cart[item.id].qty : 0;
+
+                // Création de l'encart Date si les dates sont renseignées
+                let dateBadge = '';
+                if(item.dateDebut !== "N/C" && item.dateFin !== "N/C") {
+                    dateBadge = `<div class="text-xs text-dix-dark bg-gray-100 px-2 py-1 mt-2 inline-block border border-gray-200"><i class="fas fa-calendar-alt mr-1"></i> Dispo : ${item.dateDebut} au ${item.dateFin}</div>`;
+                }
 
                 const card = document.createElement('div');
                 card.className = "bg-white p-6 shadow-sm border border-gray-200 flex flex-col justify-between hover:shadow-md transition-shadow border-l-4 border-l-dix-light";
                 card.innerHTML = `
                     <div>
-                        <div class="flex justify-between items-start mb-4">
+                        <div class="flex justify-between items-start mb-2">
                             <span class="text-xs font-dix-title tracking-widest px-3 py-1 ${badgeColor}">${item.qualite}</span>
-                            <span class="text-xs text-dix-dark opacity-60 font-dix-text italic">${item.producteur}</span>
+                            <span class="text-xs text-dix-dark opacity-80 font-dix-text italic bg-gray-50 px-2 border border-gray-100">${item.producteur}</span>
                         </div>
-                        <h3 class="text-lg text-dix-dark mb-2">${item.produit}</h3>
-                        <p class="text-dix-dark text-xl mb-6 font-dix-text">${item.prix.toFixed(2)} € <span class="text-sm opacity-50 italic">/ ${item.unite}</span></p>
+                        <h3 class="text-xl text-dix-dark mt-2 font-bold">${item.produit}</h3>
+                        ${dateBadge}
+                        <p class="text-dix-dark text-2xl mt-4 mb-6 font-dix-text">${item.prix.toFixed(2)} € <span class="text-sm opacity-50 italic">/ ${item.unite}</span></p>
                     </div>
-                    <div class="flex items-center justify-between mt-auto border-t border-gray-100 pt-5">
-                        <button onclick="updateQty(${index}, -1)" class="w-12 h-12 bg-gray-50 border border-gray-200 text-dix-dark hover:bg-gray-100 flex items-center justify-center transition-colors pb-1 text-2xl font-dix-title">-</button>
-                        <input type="number" id="qty-${index}" value="0" min="0" readonly class="w-16 text-center text-xl text-dix-dark bg-transparent border-none focus:ring-0 font-dix-text">
-                        <button onclick="updateQty(${index}, 1)" class="w-12 h-12 bg-dix-light text-dix-grey hover:bg-dix-dark flex items-center justify-center transition-colors pb-1 text-2xl font-dix-title">+</button>
+                    <div class="flex items-center justify-between mt-auto border-t border-gray-100 pt-5 bg-gray-50 -mx-6 -mb-6 px-6 pb-6">
+                        <button onclick="updateQty(${item.id}, -1)" class="w-12 h-12 bg-white border border-gray-300 text-dix-dark hover:bg-gray-100 flex items-center justify-center transition-colors pb-1 text-2xl font-dix-title shadow-sm">-</button>
+                        <input type="number" id="qty-${item.id}" value="${currentQty}" min="0" readonly class="w-16 text-center text-xl text-dix-dark bg-transparent border-none focus:ring-0 font-dix-text font-bold">
+                        <button onclick="updateQty(${item.id}, 1)" class="w-12 h-12 bg-dix-light text-white hover:bg-dix-dark flex items-center justify-center transition-colors pb-1 text-2xl font-dix-title shadow-sm">+</button>
                     </div>
                 `;
                 grid.appendChild(card);
             });
         }
 
-        function updateQty(index, change) {
-            const input = document.getElementById(`qty-${index}`);
-            let newQty = parseInt(input.value) + change;
+        function updateQty(itemId, change) {
+            const input = document.getElementById(`qty-${itemId}`);
+            // Si l'input n'est pas dans le DOM (à cause des filtres), on gère quand même le state
+            let currentVal = input ? parseInt(input.value) : (cart[itemId] ? cart[itemId].qty : 0);
+            
+            let newQty = currentVal + change;
             if (newQty < 0) newQty = 0;
-            input.value = newQty;
+            
+            if (input) input.value = newQty;
+            
+            const item = productsData.find(p => p.id === itemId);
+            if(!item) return;
 
-            const item = productsData[index];
             if (newQty > 0) {
-                cart[index] = { ...item, qty: newQty, totalLigne: newQty * item.prix };
+                cart[itemId] = { ...item, qty: newQty, totalLigne: newQty * item.prix };
             } else {
-                delete cart[index];
+                delete cart[itemId];
             }
             
             updateTotal();
@@ -345,7 +457,7 @@
             const date = document.getElementById('date-livraison').value;
             const hasItems = Object.keys(cart).length > 0;
             const btn = document.getElementById('submit-btn');
-
+            
             if (cantine && date && hasItems) {
                 btn.removeAttribute('disabled');
             } else {
@@ -357,12 +469,13 @@
             const btn = document.getElementById('submit-btn');
             btn.setAttribute('disabled', 'true');
             btn.innerText = "ENVOI EN COURS...";
-
+            
             const cantine = document.getElementById('cantine-select').value;
             const date = document.getElementById('date-livraison').value;
             
             const itemsToOrder = Object.values(cart).map(item => ({
                 ref: item.ref,
+                produit: item.produit, // Ajout du nom pour le récapitulatif
                 qty: item.qty,
                 prix: item.prix,
                 total: item.totalLigne
@@ -387,10 +500,64 @@
                     throw new Error("Erreur serveur : " + result.message);
                 }
             } catch (error) {
-                alert("Erreur lors de l'envoi de la commande : " + error.message + "\n(Vérifiez bien que l'Apps Script est déployé en 'Nouvelle version')");
+                alert("Erreur lors de l'envoi de la commande : " + error.message);
                 btn.removeAttribute('disabled');
                 btn.innerText = "VALIDER LA COMMANDE";
             }
+        }
+
+        function openPlanning() {
+            const modal = document.getElementById('planning-modal');
+            const content = document.getElementById('planning-content');
+            modal.classList.remove('hidden');
+
+            // Regrouper les produits par Famille
+            const grouped = {};
+            productsData.forEach(p => {
+                if (!grouped[p.famille]) grouped[p.famille] = [];
+                grouped[p.famille].push(p);
+            });
+
+            let html = '';
+            for (const [famille, produits] of Object.entries(grouped).sort()) {
+                html += `
+                    <div class="mb-8">
+                        <h4 class="text-xl text-dix-dark font-dix-title border-b-2 border-dix-light pb-1 mb-4 inline-block">${famille}</h4>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-gray-100 text-dix-dark font-dix-title text-sm tracking-wide">
+                                        <th class="p-3 border-b">Produit</th>
+                                        <th class="p-3 border-b">Producteur</th>
+                                        <th class="p-3 border-b">Début de disponibilité</th>
+                                        <th class="p-3 border-b">Fin de disponibilité</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                `;
+                
+                produits.forEach(p => {
+                    const debutBadge = p.dateDebut !== "N/C" ? `<span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold">${p.dateDebut}</span>` : `<span class="text-gray-400 italic">Non précisé</span>`;
+                    const finBadge = p.dateFin !== "N/C" ? `<span class="bg-red-100 text-red-800 px-2 py-1 rounded text-xs font-bold">${p.dateFin}</span>` : `<span class="text-gray-400 italic">Non précisé</span>`;
+                    
+                    html += `
+                        <tr class="hover:bg-gray-50 border-b border-gray-100 transition-colors">
+                            <td class="p-3 font-bold text-dix-dark">${p.produit}</td>
+                            <td class="p-3 text-sm italic text-gray-600">${p.producteur}</td>
+                            <td class="p-3">${debutBadge}</td>
+                            <td class="p-3">${finBadge}</td>
+                        </tr>
+                    `;
+                });
+                
+                html += `</tbody></table></div></div>`;
+            }
+
+            content.innerHTML = html;
+        }
+
+        function closePlanning() {
+            document.getElementById('planning-modal').classList.add('hidden');
         }
 
         function showError(msg) {
