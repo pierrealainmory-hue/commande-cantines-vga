@@ -27,11 +27,12 @@
             }
         }
     </script>
+    
     <style>
         body {
             font-family: 'Georgia', serif;
             color: #405F59;
-            background-color: #ffffff;
+            background-color: #f9fafb;
         }
         
         h1, h2, h3, h4, h5, h6, .titre-dix {
@@ -39,9 +40,9 @@
             text-transform: uppercase !important;
             font-weight: 400 !important;
         }
-
+        
         a { color: #549e39; }
-
+        
         .loader {
             border: 4px solid #f3f3f3;
             border-top: 4px solid #549e39;
@@ -50,213 +51,196 @@
             height: 40px;
             animation: spin 1s linear infinite;
         }
-
+        
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
-        /* Styles pour le scroll du modal de planning */
-        .modal-scroll::-webkit-scrollbar {
-            width: 8px;
-        }
-        .modal-scroll::-webkit-scrollbar-track {
-            background: #f1f1f1; 
-        }
-        .modal-scroll::-webkit-scrollbar-thumb {
-            background: #405F59; 
-            border-radius: 4px;
-        }
+        /* Styles pour la modale et la scrollbar */
+        .modal-scroll::-webkit-scrollbar { width: 8px; }
+        .modal-scroll::-webkit-scrollbar-track { background: #f1f1f1; }
+        .modal-scroll::-webkit-scrollbar-thumb { background: #405F59; border-radius: 4px; }
     </style>
 </head>
 <body class="font-dix-text text-dix-dark">
 
-    <header class="relative bg-dix-dark">
+    <header class="relative bg-dix-dark shadow-md">
         <div class="absolute inset-0 overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1596423735880-5c628fa7b243?q=80&w=2000&auto=format&fit=crop" alt="Vue aérienne de carrés de pelouse verte sur béton" class="w-full h-full object-cover opacity-30" />
-            <div class="absolute inset-0 bg-dix-dark opacity-60"></div>
+            <img src="https://images.unsplash.com/photo-1596423735880-5c628fa7b243?q=80&w=2000&auto=format&fit=crop" alt="Background" class="w-full h-full object-cover opacity-20" />
+            <div class="absolute inset-0 bg-dix-dark opacity-70"></div>
         </div>
         
-        <div class="relative max-w-4xl mx-auto px-4 py-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div class="relative max-w-5xl mx-auto px-4 py-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div>
-                <h1 class="text-3xl tracking-wider text-dix-grey mb-2">Portail de Commande Cantines</h1>
-                <p class="text-dix-grey opacity-90 font-dix-text text-lg">Expérimentation de Mutualisation Logistique</p>
+                <h1 class="text-3xl tracking-wider text-dix-grey mb-2 shadow-sm">Portail de Commande</h1>
+                <p class="text-dix-grey opacity-90 font-dix-text text-lg">Val de Garonne Agglomération</p>
             </div>
-            <div class="bg-white p-3 shadow-md h-24 flex items-center justify-center rounded-sm shrink-0">
-                <!-- Fallback texte si l'image ne charge pas pour l'exemple -->
-                <div class="font-dix-title text-dix-dark text-xl font-bold px-4">D.I.X.</div>
+            <!-- Logo placeholder si l'image n'est pas trouvée -->
+            <div class="bg-white p-3 shadow h-20 flex items-center justify-center rounded shrink-0">
+                <span class="font-dix-title text-dix-dark text-xl tracking-widest px-4">D.I.X</span>
             </div>
         </div>
     </header>
 
-    <main class="max-w-4xl mx-auto px-4 py-10">
+    <main class="max-w-5xl mx-auto px-4 py-8">
         
-        <section class="bg-white p-6 shadow-sm border border-gray-200 mb-10 border-t-4 border-t-dix-dark">
+        <section class="bg-white p-6 shadow-sm border border-gray-200 rounded mb-8 border-t-4 border-t-dix-dark">
             <h2 class="text-xl mb-5 text-dix-dark border-b border-gray-100 pb-2">1. Vos informations</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label class="block text-sm mb-2 text-dix-dark">Nom de la Cantine</label>
-                    <select id="cantine-select" class="w-full border border-gray-300 px-4 py-3 focus:outline-none focus:border-dix-light focus:ring-1 focus:ring-dix-light bg-gray-50 text-dix-dark font-dix-text">
+                    <label class="block text-sm mb-2 text-dix-dark font-bold">Nom de la Cantine</label>
+                    <select id="cantine-select" class="w-full border border-gray-300 px-4 py-3 rounded focus:outline-none focus:border-dix-light bg-gray-50 text-dix-dark">
                         <option value="">-- Chargement des établissements... --</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm mb-2 text-dix-dark">Date de livraison souhaitée</label>
-                    <input type="date" id="date-livraison" class="w-full border border-gray-300 px-4 py-3 focus:outline-none focus:border-dix-light focus:ring-1 focus:ring-dix-light bg-gray-50 text-dix-dark font-dix-text">
+                    <label class="block text-sm mb-2 text-dix-dark font-bold">Date de livraison souhaitée</label>
+                    <input type="date" id="date-livraison" class="w-full border border-gray-300 px-4 py-3 rounded focus:outline-none focus:border-dix-light bg-gray-50 text-dix-dark">
                 </div>
             </div>
         </section>
 
-        <section>
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 gap-4 border-b border-gray-200 pb-4">
-                <div>
-                    <h2 class="text-xl text-dix-dark mb-2">2. Produits disponibles</h2>
-                    <p class="text-sm opacity-70">Sélectionnez les quantités souhaitées.</p>
-                </div>
-                <div class="flex items-center gap-3">
-                    <span id="item-count" class="text-sm bg-dix-dark text-dix-grey px-4 py-2 font-dix-title tracking-wider shadow-sm">Chargement...</span>
-                    <!-- Nouveau bouton Planning -->
-                    <button onclick="openPlanning()" class="text-sm bg-dix-light text-white px-4 py-2 font-dix-title tracking-wider shadow-sm hover:bg-dix-dark transition-colors flex items-center gap-2">
+        <section class="bg-white p-6 shadow-sm border border-gray-200 rounded mb-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4 border-b border-gray-100 pb-4">
+                <h2 class="text-xl text-dix-dark grow w-full md:w-auto m-0">2. Produits disponibles</h2>
+                
+                <div class="flex gap-3">
+                    <span id="item-count" class="text-sm bg-gray-100 border border-gray-300 text-dix-dark px-4 py-2 font-dix-title tracking-wider rounded">0 PRODUITS</span>
+                    <button onclick="openPlanning()" class="text-sm bg-dix-dark text-white px-4 py-2 font-dix-title tracking-wider hover:bg-dix-light transition-colors rounded flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                        Planning
+                        PLANNING
                     </button>
                 </div>
             </div>
 
-            <!-- NOUVEAU : Barre de filtres de recherche -->
-            <div id="filters-bar" class="hidden bg-gray-50 p-4 mb-6 border border-gray-200 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Filtres -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-gray-50 p-4 rounded border border-gray-100">
                 <div>
-                    <label class="block text-xs uppercase tracking-widest text-dix-dark mb-1 font-dix-title">Recherche</label>
-                    <input type="text" id="search-input" placeholder="Ex: Pomme, Carotte..." class="w-full border border-gray-300 p-2 focus:ring-1 focus:ring-dix-light focus:border-dix-light bg-white text-sm">
+                    <label class="block text-xs uppercase tracking-wider mb-1 text-gray-500 font-dix-title">Recherche</label>
+                    <input type="text" id="search-input" placeholder="Ex: Carotte, Pomme..." class="w-full border border-gray-300 px-3 py-2 rounded text-sm focus:border-dix-light focus:outline-none">
                 </div>
                 <div>
-                    <label class="block text-xs uppercase tracking-widest text-dix-dark mb-1 font-dix-title">Filtrer par Famille</label>
-                    <select id="filter-famille" class="w-full border border-gray-300 p-2 focus:ring-1 focus:ring-dix-light focus:border-dix-light bg-white text-sm">
-                        <option value="">Toutes les familles</option>
+                    <label class="block text-xs uppercase tracking-wider mb-1 text-gray-500 font-dix-title">Filtrer par Famille</label>
+                    <select id="family-filter" class="w-full border border-gray-300 px-3 py-2 rounded text-sm focus:border-dix-light focus:outline-none">
+                        <option value="ALL">Toutes les familles</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block text-xs uppercase tracking-widest text-dix-dark mb-1 font-dix-title">Filtrer par Producteur</label>
-                    <select id="filter-producteur" class="w-full border border-gray-300 p-2 focus:ring-1 focus:ring-dix-light focus:border-dix-light bg-white text-sm">
-                        <option value="">Tous les producteurs</option>
+                    <label class="block text-xs uppercase tracking-wider mb-1 text-gray-500 font-dix-title">Filtrer par Producteur</label>
+                    <select id="producer-filter" class="w-full border border-gray-300 px-3 py-2 rounded text-sm focus:border-dix-light focus:outline-none">
+                        <option value="ALL">Tous les producteurs</option>
                     </select>
                 </div>
             </div>
 
-            <div id="loading-state" class="flex flex-col items-center justify-center py-16">
-                <div class="loader mb-6"></div>
+            <div id="loading-state" class="flex flex-col items-center justify-center py-12">
+                <div class="loader mb-4"></div>
                 <p class="text-dix-dark opacity-70 italic">Synchronisation avec la mercuriale en cours...</p>
             </div>
-
-            <div id="error-state" class="hidden bg-red-50 border-l-4 border-red-500 p-5 mb-6">
+            
+            <div id="error-state" class="hidden bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded">
                 <p class="text-red-700 font-dix-text" id="error-message">Erreur de chargement des produits.</p>
             </div>
-
-            <!-- Grille des produits injectée en JS -->
-            <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6 hidden">
+            
+            <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5 hidden">
                 <!-- Les cartes produits apparaitront ici -->
             </div>
         </section>
 
         <div class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-[0_-10px_20px_-5px_rgba(0,0,0,0.1)] p-4 z-40">
-            <div class="max-w-4xl mx-auto flex justify-between items-center">
-                <div>
-                    <p class="text-sm text-dix-dark opacity-70 uppercase tracking-widest font-dix-title">Total estimé</p>
+            <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-center md:text-left">
+                    <p class="text-sm text-gray-500 uppercase tracking-widest font-dix-title">Total estimé de la commande</p>
                     <p class="text-3xl text-dix-dark font-bold" id="cart-total">0.00 €</p>
                 </div>
-                <button id="submit-btn" onclick="submitOrder()" class="bg-dix-light text-white font-dix-title tracking-wider py-4 px-8 shadow hover:bg-dix-dark transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                    Valider la commande
+                <button id="submit-btn" onclick="submitOrder()" class="bg-dix-light text-white rounded font-dix-title tracking-wider py-3 px-8 shadow-lg hover:bg-dix-dark transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed w-full md:w-auto text-lg" disabled>
+                    VALIDER LA COMMANDE
                 </button>
             </div>
         </div>
         
-        <div class="h-16"></div>
+        <div class="h-24"></div>
     </main>
 
-    <footer class="bg-dix-dark text-dix-grey py-10 mt-12 pb-32">
-        <div class="max-w-4xl mx-auto px-4 text-center">
-            <p class="mb-4 text-sm tracking-wide">
-                Outil conçu et réalisé par <span class="mx-2">|</span> <a href="https://www.dix-autrement.fr" target="_blank" class="text-dix-light hover:text-white transition-colors duration-200">www.dix-autrement.fr</a> <span class="mx-2">|</span>
-            </p>
-            <div class="opacity-70 text-xs leading-relaxed max-w-2xl mx-auto">
-                <p class="mb-1">© 2026 Cabinet DIX Autrement. Tous droits réservés.</p>
-                <p>Toute reproduction, copie ou utilisation non autorisée de cet outil ou de son code source est strictement interdite.</p>
+    <!-- MODAL PLANNING -->
+    <div id="planning-modal" class="fixed inset-0 bg-dix-dark bg-opacity-80 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col">
+            <div class="p-6 border-b border-gray-200 flex justify-between items-center bg-gray-50 rounded-t-lg">
+                <h3 class="text-2xl text-dix-dark font-dix-title tracking-wide">Planning des Disponibilités</h3>
+                <button onclick="closePlanning()" class="text-gray-500 hover:text-red-600 text-3xl leading-none">&times;</button>
             </div>
-        </div>
-    </footer>
-
-    <!-- MODAL DE SUCCÈS -->
-    <div id="success-modal" class="fixed inset-0 bg-dix-dark bg-opacity-90 z-50 hidden flex items-center justify-center">
-        <div class="bg-white p-10 max-w-md w-full text-center mx-4 shadow-2xl border-t-8 border-dix-light">
-            <div class="w-20 h-20 bg-gray-50 border-2 border-dix-light rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg class="w-10 h-10 text-dix-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            <div class="p-6 overflow-y-auto modal-scroll flex-grow" id="planning-content">
+                <!-- Le planning généré s'affichera ici -->
             </div>
-            <h3 class="text-2xl mb-3 text-dix-dark font-dix-title uppercase">Commande envoyée</h3>
-            <p class="text-dix-dark opacity-80 mb-8 font-dix-text">Les producteurs ont bien reçu votre demande pour cette semaine. Le récapitulatif a été mis à jour.</p>
-            <button onclick="location.reload()" class="w-full bg-dix-light text-white py-3 font-dix-title tracking-wider hover:bg-dix-dark transition-colors duration-300">NOUVELLE COMMANDE</button>
+            <div class="p-4 border-t border-gray-200 text-right bg-gray-50 rounded-b-lg">
+                <button onclick="closePlanning()" class="bg-dix-dark text-white px-6 py-2 rounded font-dix-title tracking-wider hover:bg-dix-light transition-colors">FERMER</button>
+            </div>
         </div>
     </div>
 
-    <!-- MODAL PLANNING DES DISPONIBILITÉS -->
-    <div id="planning-modal" class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl border-t-8 border-dix-dark">
-            <div class="p-6 border-b border-gray-200 flex justify-between items-center bg-gray-50">
-                <h3 class="text-2xl text-dix-dark font-dix-title uppercase tracking-wide">📅 Planning des disponibilités</h3>
-                <button onclick="closePlanning()" class="text-dix-dark hover:text-red-600">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
+    <!-- MODAL SUCCÈS -->
+    <div id="success-modal" class="fixed inset-0 bg-dix-dark bg-opacity-90 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white p-10 max-w-md w-full text-center rounded-lg shadow-2xl border-t-8 border-dix-light">
+            <div class="w-20 h-20 bg-green-50 border-2 border-dix-light rounded-full flex items-center justify-center mx-auto mb-6 text-dix-light">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
             </div>
-            <div id="planning-content" class="p-6 overflow-y-auto modal-scroll flex-grow bg-white">
-                <!-- Le contenu du planning sera injecté ici -->
-            </div>
-            <div class="p-4 border-t border-gray-200 bg-gray-50 text-right">
-                <button onclick="closePlanning()" class="bg-dix-dark text-white px-6 py-2 font-dix-title tracking-wider hover:bg-opacity-80 transition-colors">FERMER</button>
-            </div>
+            <h3 class="text-2xl mb-3 text-dix-dark font-dix-title">Commande envoyée !</h3>
+            <p class="text-gray-600 mb-8 font-dix-text">Votre commande a été ajoutée avec succès dans la base de données. Les producteurs ont été notifiés.</p>
+            <button onclick="location.reload()" class="w-full bg-dix-light text-white rounded py-3 font-dix-title tracking-wider hover:bg-dix-dark transition-colors">NOUVELLE COMMANDE</button>
+        </div>
+    </div>
+    
+    <!-- MODAL ERREUR MESSAGE BOX -->
+    <div id="msg-modal" class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white p-8 max-w-sm w-full text-center rounded shadow-xl border-t-4 border-red-500">
+            <h3 class="text-xl mb-3 text-red-600 font-dix-title">Information</h3>
+            <p class="text-gray-700 mb-6 font-dix-text" id="msg-content">Message</p>
+            <button onclick="document.getElementById('msg-modal').classList.add('hidden')" class="bg-gray-200 text-gray-800 px-6 py-2 rounded hover:bg-gray-300 font-dix-title tracking-wider">FERMER</button>
         </div>
     </div>
 
     <script>
         // ==========================================
-        // ⚠️ CONFIGURATION : LES VRAIS LIENS SONT ICI ⚠️
+        // LIENS GOOGLE SHEETS
         // ==========================================
-        
-        // 1. Lien vers l'onglet "1. Mercuriale" (Pour les produits)
         const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSXWe-6t3f4Xwi-lfeTlmzo6A35O_gnEx6xJTNs_mq79lbz2tEIHfvLRD56vrTAbxc8jVERCIzYYJ71/pub?gid=1525866873&single=true&output=csv";
-        
-        // 2. Lien vers l'onglet "Paramètres" (Pour la liste des cantines)
         const CANTINES_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSXWe-6t3f4Xwi-lfeTlmzo6A35O_gnEx6xJTNs_mq79lbz2tEIHfvLRD56vrTAbxc8jVERCIzYYJ71/pub?gid=0&single=true&output=csv"; 
-        
-        // 3. Votre URL Apps Script validée (Pour l'envoi des commandes)
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyqJ0mBYyyHAtzQ5-oAfut3wjs8sF7blfqJcXLe8aREpFxpjcnf-1WVirfDCXBqxnOa/exec";
         
-        // ==========================================
-        
         let productsData = [];
-        let filteredProducts = [];
         const cart = {};
 
+        // Listeners
         document.addEventListener('DOMContentLoaded', () => {
             fetchCantines();
             fetchProducts();
             
-            // Listeners pour la validation du formulaire
             document.getElementById('cantine-select').addEventListener('change', checkFormValidity);
             document.getElementById('date-livraison').addEventListener('change', checkFormValidity);
-
+            
             // Listeners pour les filtres
-            document.getElementById('search-input').addEventListener('input', applyFilters);
-            document.getElementById('filter-famille').addEventListener('change', applyFilters);
-            document.getElementById('filter-producteur').addEventListener('change', applyFilters);
+            document.getElementById('search-input').addEventListener('input', renderProducts);
+            document.getElementById('family-filter').addEventListener('change', renderProducts);
+            document.getElementById('producer-filter').addEventListener('change', renderProducts);
         });
+
+        function showMessage(msg) {
+            document.getElementById('msg-content').innerText = msg;
+            document.getElementById('msg-modal').classList.remove('hidden');
+        }
 
         async function fetchCantines() {
             try {
-                const response = await fetch(CANTINES_CSV_URL);
+                // Astuce anti-cache
+                const urlSansCache = CANTINES_CSV_URL + "&timestamp=" + new Date().getTime();
+                const response = await fetch(urlSansCache, { cache: 'no-store' });
                 if (!response.ok) throw new Error("Erreur CSV Cantines");
-                const csvText = await response.text();
                 
+                const csvText = await response.text();
                 const lines = csvText.split(/\r?\n/);
                 const select = document.getElementById('cantine-select');
+                
                 select.innerHTML = '<option value="">-- Sélectionnez votre établissement --</option>';
                 
                 for (let i = 1; i < lines.length; i++) {
@@ -272,102 +256,87 @@
                     }
                 }
             } catch (error) {
-                console.error("Impossible de charger les cantines:", error);
+                console.error(error);
                 document.getElementById('cantine-select').innerHTML = '<option value="">-- Erreur de chargement --</option>';
             }
         }
 
         async function fetchProducts() {
             try {
-                const response = await fetch(CSV_URL);
-                if (!response.ok) throw new Error("Erreur réseau");
+                // Astuce anti-cache
+                const urlSansCache = CSV_URL + "&timestamp=" + new Date().getTime();
+                const response = await fetch(urlSansCache, { cache: 'no-store' });
+                if (!response.ok) throw new Error("Erreur réseau CSV Mercuriale");
+                
                 const csvText = await response.text();
                 parseCSV(csvText);
             } catch (error) {
-                showError("Impossible de charger la mercuriale. Vérifiez le lien CSV.");
+                showError("Impossible de charger la mercuriale. Veuillez vérifier votre connexion.");
                 console.error(error);
             }
         }
 
         function parseCSV(text) {
-            const lines = text.split(/\r?\n/); 
+            const lines = text.split(/\r?\n/);
             productsData = [];
             
-            // Hypothèse de structure des colonnes dans le Sheet (modifiable selon votre besoin) :
-            // 0:Producteur | 1:Produit | 2:Qualite | 3:Unite | 4:Prix | 5:Dispo | 6:Ref | 7:Famille | 8:DateDebut | 9:DateFin
+            let familles = new Set();
+            let producteurs = new Set();
             
+            // Colonnes attendues (0 à 9 minimum)
+            // 0:Prod, 1:Produit, 2:Qualité, 3:Unité, 4:Prix, 5:Dispo, 6:Réf, 7:Famille, 8:Date Début, 9:Date Fin
             for (let i = 1; i < lines.length; i++) {
                 if (!lines[i].trim()) continue;
                 
                 const columns = lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                if (columns.length < 7) continue;
+                if (columns.length < 6) continue; // Minimum requis pour l'affichage base
                 
                 const cleanRow = columns.map(el => el ? el.replace(/^"|"$/g, '').trim() : "");
                 const dispo = cleanRow[5] ? cleanRow[5].toUpperCase() : "";
                 
-                // Si la ligne est notée comme disponible (VRAI/TRUE)
                 if (dispo === 'VRAI' || dispo === 'TRUE') {
                     const prix = parseFloat(cleanRow[4].replace(',', '.'));
                     
-                    // Extraction sécurisée des nouvelles colonnes (Famille et Dates)
-                    const famille = cleanRow[7] ? cleanRow[7] : "Non catégorisé";
-                    const dateDebut = cleanRow[8] ? cleanRow[8] : "N/C";
-                    const dateFin = cleanRow[9] ? cleanRow[9] : "N/C";
-
+                    const producteur = cleanRow[0] || "Inconnu";
+                    const famille = cleanRow[7] || "Non catégorisé";
+                    
+                    producteurs.add(producteur);
+                    familles.add(famille);
+                    
                     productsData.push({
-                        id: i, // identifiant unique basé sur la ligne
-                        producteur: cleanRow[0],
+                        originalIndex: i, // Garder une trace pour le panier
+                        producteur: producteur,
                         produit: cleanRow[1],
-                        qualite: cleanRow[2],
-                        unite: cleanRow[3],
+                        qualite: cleanRow[2] || "-",
+                        unite: cleanRow[3] || "kg",
                         prix: isNaN(prix) ? 0 : prix,
-                        ref: cleanRow[6],
+                        ref: cleanRow[6] || "",
                         famille: famille,
-                        dateDebut: dateDebut,
-                        dateFin: dateFin
+                        dateDebut: cleanRow[8] || "",
+                        dateFin: cleanRow[9] || ""
                     });
                 }
             }
             
-            filteredProducts = [...productsData]; // Au départ, tout est affiché
-            populateFilters();
+            populateFilters(familles, producteurs);
             renderProducts();
+            generatePlanning();
         }
 
-        function populateFilters() {
-            const prodSelect = document.getElementById('filter-producteur');
-            const famSelect = document.getElementById('filter-famille');
-            
-            // Extraire listes uniques
-            const producteurs = [...new Set(productsData.map(p => p.producteur))].sort();
-            const familles = [...new Set(productsData.map(p => p.famille))].sort();
-            
-            producteurs.forEach(p => {
-                if(p) prodSelect.innerHTML += `<option value="${p}">${p}</option>`;
-            });
-            
+        function populateFilters(familles, producteurs) {
+            const famSelect = document.getElementById('family-filter');
             familles.forEach(f => {
-                if(f) famSelect.innerHTML += `<option value="${f}">${f}</option>`;
+                const opt = document.createElement('option');
+                opt.value = f; opt.innerText = f;
+                famSelect.appendChild(opt);
             });
-
-            // Afficher la barre de filtre une fois les données chargées
-            document.getElementById('filters-bar').classList.remove('hidden');
-        }
-
-        function applyFilters() {
-            const searchVal = document.getElementById('search-input').value.toLowerCase();
-            const famVal = document.getElementById('filter-famille').value;
-            const prodVal = document.getElementById('filter-producteur').value;
-
-            filteredProducts = productsData.filter(p => {
-                const matchSearch = p.produit.toLowerCase().includes(searchVal) || p.producteur.toLowerCase().includes(searchVal);
-                const matchFam = famVal === "" || p.famille === famVal;
-                const matchProd = prodVal === "" || p.producteur === prodVal;
-                
-                return matchSearch && matchFam && matchProd;
+            
+            const prodSelect = document.getElementById('producer-filter');
+            producteurs.forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p; opt.innerText = p;
+                prodSelect.appendChild(opt);
             });
-
-            renderProducts();
         }
 
         function renderProducts() {
@@ -375,69 +344,84 @@
             const loader = document.getElementById('loading-state');
             const count = document.getElementById('item-count');
             
+            // Valeurs des filtres
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const familyFilter = document.getElementById('family-filter').value;
+            const producerFilter = document.getElementById('producer-filter').value;
+            
             grid.innerHTML = '';
             loader.classList.add('hidden');
             grid.classList.remove('hidden');
             
-            count.innerText = `${filteredProducts.length} PRODUITS`;
-
-            if (filteredProducts.length === 0) {
-                grid.innerHTML = `<div class="col-span-full p-10 text-center bg-gray-50 border border-gray-200"><p class="text-dix-dark opacity-70 italic font-dix-text">Aucun produit ne correspond à votre recherche.</p></div>`;
-                return;
-            }
-
-            filteredProducts.forEach((item) => {
-                const isBio = item.qualite.toLowerCase().includes('bio');
-                const badgeColor = isBio ? 'bg-dix-light text-white' : 'bg-gray-200 text-dix-dark';
+            let displayedCount = 0;
+            
+            productsData.forEach((item, arrIndex) => {
+                // Application des filtres
+                const matchSearch = item.produit.toLowerCase().includes(searchTerm) || item.producteur.toLowerCase().includes(searchTerm);
+                const matchFamily = familyFilter === 'ALL' || item.famille === familyFilter;
+                const matchProducer = producerFilter === 'ALL' || item.producteur === producerFilter;
                 
-                // Récupération de la quantité déjà dans le panier si existante
-                const currentQty = cart[item.id] ? cart[item.id].qty : 0;
+                if (matchSearch && matchFamily && matchProducer) {
+                    displayedCount++;
+                    const isBio = item.qualite.toLowerCase().includes('bio');
+                    const badgeColor = isBio ? 'bg-dix-light text-white' : 'bg-gray-200 text-gray-700';
+                    
+                    // Récupération de la quantité actuelle depuis le panier s'il existe
+                    const currentQty = cart[item.originalIndex] ? cart[item.originalIndex].qty : 0;
+                    
+                    // Badge de date si renseigné
+                    let dateHtml = '';
+                    if(item.dateDebut || item.dateFin) {
+                        dateHtml = `<div class="mt-2 text-xs bg-gray-100 text-gray-600 rounded px-2 py-1 inline-block border border-gray-200 font-bold">
+                                        <svg class="w-3 h-3 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                        Dispo : ${item.dateDebut} au ${item.dateFin}
+                                    </div>`;
+                    }
 
-                // Création de l'encart Date si les dates sont renseignées
-                let dateBadge = '';
-                if(item.dateDebut !== "N/C" && item.dateFin !== "N/C") {
-                    dateBadge = `<div class="text-xs text-dix-dark bg-gray-100 px-2 py-1 mt-2 inline-block border border-gray-200"><i class="fas fa-calendar-alt mr-1"></i> Dispo : ${item.dateDebut} au ${item.dateFin}</div>`;
-                }
-
-                const card = document.createElement('div');
-                card.className = "bg-white p-6 shadow-sm border border-gray-200 flex flex-col justify-between hover:shadow-md transition-shadow border-l-4 border-l-dix-light";
-                card.innerHTML = `
-                    <div>
-                        <div class="flex justify-between items-start mb-2">
-                            <span class="text-xs font-dix-title tracking-widest px-3 py-1 ${badgeColor}">${item.qualite}</span>
-                            <span class="text-xs text-dix-dark opacity-80 font-dix-text italic bg-gray-50 px-2 border border-gray-100">${item.producteur}</span>
+                    const card = document.createElement('div');
+                    card.className = "bg-white p-5 rounded border border-gray-200 shadow-sm hover:shadow transition-shadow flex flex-col justify-between border-l-4 border-l-dix-light";
+                    card.innerHTML = `
+                        <div>
+                            <div class="flex justify-between items-start mb-3">
+                                <span class="text-xs font-dix-title tracking-widest px-2 py-1 rounded ${badgeColor}">${item.qualite}</span>
+                                <span class="text-xs text-gray-500 font-dix-text italic text-right">${item.producteur}</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-dix-dark leading-tight">${item.produit}</h3>
+                            <p class="text-sm text-gray-500 uppercase tracking-widest mb-1">${item.famille}</p>
+                            <p class="text-dix-dark text-xl font-bold mt-2">${item.prix.toFixed(2)} € <span class="text-sm opacity-60 font-normal italic">/ ${item.unite}</span></p>
+                            ${dateHtml}
                         </div>
-                        <h3 class="text-xl text-dix-dark mt-2 font-bold">${item.produit}</h3>
-                        ${dateBadge}
-                        <p class="text-dix-dark text-2xl mt-4 mb-6 font-dix-text">${item.prix.toFixed(2)} € <span class="text-sm opacity-50 italic">/ ${item.unite}</span></p>
-                    </div>
-                    <div class="flex items-center justify-between mt-auto border-t border-gray-100 pt-5 bg-gray-50 -mx-6 -mb-6 px-6 pb-6">
-                        <button onclick="updateQty(${item.id}, -1)" class="w-12 h-12 bg-white border border-gray-300 text-dix-dark hover:bg-gray-100 flex items-center justify-center transition-colors pb-1 text-2xl font-dix-title shadow-sm">-</button>
-                        <input type="number" id="qty-${item.id}" value="${currentQty}" min="0" readonly class="w-16 text-center text-xl text-dix-dark bg-transparent border-none focus:ring-0 font-dix-text font-bold">
-                        <button onclick="updateQty(${item.id}, 1)" class="w-12 h-12 bg-dix-light text-white hover:bg-dix-dark flex items-center justify-center transition-colors pb-1 text-2xl font-dix-title shadow-sm">+</button>
-                    </div>
-                `;
-                grid.appendChild(card);
+                        <div class="flex items-center justify-between mt-6 bg-gray-50 p-2 rounded border border-gray-100">
+                            <button onclick="updateQty(${arrIndex}, -1)" class="w-10 h-10 bg-white border border-gray-300 rounded text-dix-dark hover:bg-gray-100 transition-colors text-xl font-bold">-</button>
+                            <input type="number" id="qty-${item.originalIndex}" value="${currentQty}" min="0" readonly class="w-14 text-center text-lg font-bold text-dix-dark bg-transparent border-none focus:ring-0">
+                            <button onclick="updateQty(${arrIndex}, 1)" class="w-10 h-10 bg-dix-light rounded text-white hover:bg-dix-dark transition-colors text-xl font-bold">+</button>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                }
             });
+            
+            count.innerText = `${displayedCount} PRODUIT(S)`;
+            
+            if (displayedCount === 0) {
+                grid.innerHTML = `<div class="col-span-full p-8 text-center bg-gray-50 border border-gray-200 rounded"><p class="text-gray-500 italic">Aucun produit ne correspond à votre recherche.</p></div>`;
+            }
         }
 
-        function updateQty(itemId, change) {
-            const input = document.getElementById(`qty-${itemId}`);
-            // Si l'input n'est pas dans le DOM (à cause des filtres), on gère quand même le state
-            let currentVal = input ? parseInt(input.value) : (cart[itemId] ? cart[itemId].qty : 0);
+        function updateQty(arrIndex, change) {
+            const item = productsData[arrIndex];
+            const originalIndex = item.originalIndex;
             
-            let newQty = currentVal + change;
+            const input = document.getElementById(`qty-${originalIndex}`);
+            let newQty = parseInt(input.value) + change;
             if (newQty < 0) newQty = 0;
             
-            if (input) input.value = newQty;
+            input.value = newQty;
             
-            const item = productsData.find(p => p.id === itemId);
-            if(!item) return;
-
             if (newQty > 0) {
-                cart[itemId] = { ...item, qty: newQty, totalLigne: newQty * item.prix };
+                cart[originalIndex] = { ...item, qty: newQty, totalLigne: newQty * item.prix };
             } else {
-                delete cart[itemId];
+                delete cart[originalIndex];
             }
             
             updateTotal();
@@ -473,20 +457,20 @@
             const cantine = document.getElementById('cantine-select').value;
             const date = document.getElementById('date-livraison').value;
             
+            // CORRECTION MAJEURE ICI : On génère le nom complet "produitFull" attendu par le script Google
             const itemsToOrder = Object.values(cart).map(item => ({
-                ref: item.ref,
-                produit: item.produit, // Ajout du nom pour le récapitulatif
+                produitFull: `${item.produit} (${item.qualite}) - ${item.producteur} [${item.prix.toFixed(2)} € / ${item.unite}]`,
                 qty: item.qty,
                 prix: item.prix,
                 total: item.totalLigne
             }));
-
+            
             const payload = {
                 cantine: cantine,
                 date: date,
                 items: itemsToOrder
             };
-
+            
             try {
                 const response = await fetch(APPS_SCRIPT_URL, {
                     method: 'POST',
@@ -497,65 +481,64 @@
                 if (result.status === 'success') {
                     document.getElementById('success-modal').classList.remove('hidden');
                 } else {
-                    throw new Error("Erreur serveur : " + result.message);
+                    throw new Error(result.message);
                 }
             } catch (error) {
-                alert("Erreur lors de l'envoi de la commande : " + error.message);
+                showMessage("Impossible d'envoyer la commande. Détail technique : " + error.message);
                 btn.removeAttribute('disabled');
                 btn.innerText = "VALIDER LA COMMANDE";
             }
         }
 
-        function openPlanning() {
-            const modal = document.getElementById('planning-modal');
+        function generatePlanning() {
             const content = document.getElementById('planning-content');
-            modal.classList.remove('hidden');
-
-            // Regrouper les produits par Famille
+            
+            // Grouper les produits par famille
             const grouped = {};
-            productsData.forEach(p => {
-                if (!grouped[p.famille]) grouped[p.famille] = [];
-                grouped[p.famille].push(p);
+            productsData.forEach(item => {
+                if(!grouped[item.famille]) grouped[item.famille] = [];
+                grouped[item.famille].push(item);
             });
-
+            
             let html = '';
-            for (const [famille, produits] of Object.entries(grouped).sort()) {
-                html += `
-                    <div class="mb-8">
-                        <h4 class="text-xl text-dix-dark font-dix-title border-b-2 border-dix-light pb-1 mb-4 inline-block">${famille}</h4>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse">
-                                <thead>
-                                    <tr class="bg-gray-100 text-dix-dark font-dix-title text-sm tracking-wide">
-                                        <th class="p-3 border-b">Produit</th>
-                                        <th class="p-3 border-b">Producteur</th>
-                                        <th class="p-3 border-b">Début de disponibilité</th>
-                                        <th class="p-3 border-b">Fin de disponibilité</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                `;
-                
-                produits.forEach(p => {
-                    const debutBadge = p.dateDebut !== "N/C" ? `<span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold">${p.dateDebut}</span>` : `<span class="text-gray-400 italic">Non précisé</span>`;
-                    const finBadge = p.dateFin !== "N/C" ? `<span class="bg-red-100 text-red-800 px-2 py-1 rounded text-xs font-bold">${p.dateFin}</span>` : `<span class="text-gray-400 italic">Non précisé</span>`;
-                    
-                    html += `
-                        <tr class="hover:bg-gray-50 border-b border-gray-100 transition-colors">
-                            <td class="p-3 font-bold text-dix-dark">${p.produit}</td>
-                            <td class="p-3 text-sm italic text-gray-600">${p.producteur}</td>
-                            <td class="p-3">${debutBadge}</td>
-                            <td class="p-3">${finBadge}</td>
-                        </tr>
-                    `;
+            for (let famille in grouped) {
+                html += `<div class="mb-8">
+                            <h4 class="text-xl font-dix-title bg-dix-dark text-white px-4 py-2 rounded-t">${famille}</h4>
+                            <div class="overflow-x-auto shadow rounded-b border border-gray-200">
+                                <table class="w-full text-left border-collapse bg-white">
+                                    <thead>
+                                        <tr class="bg-gray-100 text-gray-600 uppercase text-xs tracking-wider">
+                                            <th class="p-3 border-b border-gray-200">Produit</th>
+                                            <th class="p-3 border-b border-gray-200">Producteur</th>
+                                            <th class="p-3 border-b border-gray-200">Date Début</th>
+                                            <th class="p-3 border-b border-gray-200">Date Fin</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-sm">`;
+                                    
+                grouped[famille].forEach(item => {
+                    const d1 = item.dateDebut || "-";
+                    const d2 = item.dateFin || "-";
+                    html += `       <tr class="hover:bg-gray-50">
+                                        <td class="p-3 border-b border-gray-100 font-bold text-dix-dark">${item.produit}</td>
+                                        <td class="p-3 border-b border-gray-100 text-gray-600">${item.producteur}</td>
+                                        <td class="p-3 border-b border-gray-100"><span class="bg-green-100 text-green-800 px-2 py-1 rounded">${d1}</span></td>
+                                        <td class="p-3 border-b border-gray-100"><span class="bg-red-100 text-red-800 px-2 py-1 rounded">${d2}</span></td>
+                                    </tr>`;
                 });
                 
-                html += `</tbody></table></div></div>`;
+                html += `           </tbody>
+                                </table>
+                            </div>
+                        </div>`;
             }
-
             content.innerHTML = html;
         }
 
+        function openPlanning() {
+            document.getElementById('planning-modal').classList.remove('hidden');
+        }
+        
         function closePlanning() {
             document.getElementById('planning-modal').classList.add('hidden');
         }
